@@ -13,8 +13,7 @@ class InputTextField extends StatefulWidget {
   final TextEditingController? controller;
   final List<TextInputFormatter>? inputFormatters;
   final bool isDateTime;
-  final TextInputType?
-      keyboardType; // Adiciona a opção para escolher o tipo de teclado
+  final TextInputType? keyboardType;
 
   const InputTextField({
     super.key,
@@ -27,8 +26,7 @@ class InputTextField extends StatefulWidget {
     this.onChanged,
     this.inputFormatters,
     this.isDateTime = false,
-    this.keyboardType =
-        TextInputType.text, // Inicializa com o teclado de texto padrão
+    this.keyboardType = TextInputType.text,
   });
 
   @override

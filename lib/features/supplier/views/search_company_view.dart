@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recicla_facil/components/buttons/button_elevated.dart';
+import 'package:recicla_facil/components/inputs/dropdown_button_component.dart';
 import 'package:recicla_facil/components/inputs/input_text_field.dart';
 import 'package:recicla_facil/enum/trash_type.dart';
 import 'package:recicla_facil/features/supplier/modals/proposal_modal.dart';
@@ -42,22 +43,16 @@ class SearchCompanyView extends GetView {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Obx(() {
-              return DropdownButton<TrashTypeEnum>(
-                value: controller.selectedType.value,
+              return DropdownButtonComponent(
+                selectedType: controller.selectedType.value,
                 onChanged: (TrashTypeEnum? newValue) {
                   if (newValue != null) {
                     controller.selectedType.value = newValue;
                   }
                 },
-                items: TrashTypeEnum.values
-                    .map<DropdownMenuItem<TrashTypeEnum>>((TrashTypeEnum type) {
-                  return DropdownMenuItem<TrashTypeEnum>(
-                    value: type,
-                    child: Text(type.description),
-                  );
-                }).toList(),
               );
             }),
+            const SizedBox(height: 10),
             InputTextField(
               controller: controller.searchController,
               icon: Icons.business,

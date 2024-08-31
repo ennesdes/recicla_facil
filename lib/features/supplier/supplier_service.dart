@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:recicla_facil/models/api_response.dart';
 import 'package:recicla_facil/models/company_model.dart';
+import 'package:recicla_facil/models/proposal.dart';
 import 'package:recicla_facil/utils/api_service.dart';
 
 class SupplierService {
@@ -126,8 +127,8 @@ class SupplierService {
         var body = jsonDecode(response['body']) as Map<String, dynamic>;
         var data = body['data'] as List<dynamic>;
 
-        List<CompanyModel> companyList = data
-            .map((item) => CompanyModel.fromJson(item as Map<String, dynamic>))
+        List<Proposal> companyList = data
+            .map((item) => Proposal.fromMap(item as Map<String, dynamic>))
             .toList();
 
         return ApiResponse(
