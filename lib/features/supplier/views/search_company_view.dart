@@ -28,6 +28,13 @@ class SearchCompanyView extends GetView {
         title: const Text('Buscar Empresa'),
         backgroundColor: AppConfig.primaryColor,
         foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            controller.getProposal(dialog);
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

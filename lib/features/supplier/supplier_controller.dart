@@ -6,9 +6,10 @@ import 'package:recicla_facil/enum/trash_type.dart';
 import 'package:recicla_facil/features/supplier/supplier_service.dart';
 import 'package:recicla_facil/models/api_response.dart';
 import 'package:recicla_facil/models/company_model.dart';
+import 'package:recicla_facil/models/proposal.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
-class SupplierController {
+class SupplierController extends GetxController {
   late String? token;
 
   var selectedType = TrashTypeEnum.recyclable.obs;
@@ -18,6 +19,7 @@ class SupplierController {
   final TextEditingController dateController = TextEditingController();
 
   var companyResults = <CompanyModel>[].obs;
+  var proposalResults = <Proposal>[].obs;
 
   Future<void> getCollectors(SimpleFontelicoProgressDialog dialog) async {
     try {
@@ -72,6 +74,24 @@ class SupplierController {
     } on Exception catch (ex) {
       CustomSnackbar.showError('Erro ao realizar login');
       printError(info: 'Erro ao realizar login: $ex');
+    } finally {
+      dialog.hide();
+    }
+  }
+
+  Future<void> getProposal(SimpleFontelicoProgressDialog dialog) async {
+    try {
+      final ApiResponse response = await SupplierService().getProposal();
+
+      if (response.success) {
+        proposalResults.clear();
+        proposalResults.value = response.data;
+      } else {
+        CustomSnackbar.showError(response.message!);
+      }
+    } on Exception catch (ex) {
+      proposalResults.clear();
+      printError(info: 'Erro ao realizar consulta das propostas: $ex');
     } finally {
       dialog.hide();
     }

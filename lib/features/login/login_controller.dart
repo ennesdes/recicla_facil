@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:recicla_facil/components/alerts/custom_snackbar.dart';
 import 'package:recicla_facil/features/login/login_service.dart';
+import 'package:recicla_facil/features/supplier/supplier_controller.dart';
 import 'package:recicla_facil/models/api_response.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
@@ -24,7 +25,11 @@ class LoginController {
 
         if (response.data is int && response.data == 1) {
           Get.offAllNamed('/supplier_page');
+          dialog.hide();
+          SupplierController().getProposal(dialog);
         } else if (response.data is int && response.data == 2) {
+          dialog.hide();
+          SupplierController().getProposal(dialog);
           Get.offAllNamed('/collector_page');
         } else {
           CustomSnackbar.showError('Tipo de usuário inválido');
