@@ -1,0 +1,11 @@
+Login admin
+admin@admin.local
+332211
+
+Login fornecedor
+fornecedor@fornecedor.local
+332211
+
+Login coletor
+coletor@coletor.local
+332211

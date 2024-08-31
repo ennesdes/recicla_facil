@@ -21,7 +21,14 @@ class LoginController {
       if (response.success) {
         CustomSnackbar.showSuccess(response.message!);
         dialog.hide();
-        Get.offAllNamed('/table');
+
+        if (response.data is int && response.data == 1) {
+          Get.offAllNamed('/supplier_page');
+        } else if (response.data is int && response.data == 2) {
+          Get.offAllNamed('/collector_page');
+        } else {
+          CustomSnackbar.showError('Tipo de usuário inválido');
+        }
       } else {
         CustomSnackbar.showError(response.message!);
       }
@@ -42,7 +49,7 @@ class LoginController {
       if (response.success) {
         CustomSnackbar.showSuccess(response.message!);
 
-        Get.offAllNamed('/login');
+        Get.offAllNamed('/login_page');
       } else {
         CustomSnackbar.showError(response.message!);
       }

@@ -4,7 +4,7 @@ import 'package:recicla_facil/models/api_response.dart';
 import 'package:recicla_facil/utils/api_service.dart';
 import 'package:recicla_facil/utils/token_manager.dart';
 
-class LoginService {
+class SupplierService {
   Future<ApiResponse> login(String login, String password) async {
     try {
       var response = await ApiService().post(
@@ -31,7 +31,6 @@ class LoginService {
           return ApiResponse(
             success: true,
             message: 'Login realizado com sucesso',
-            data: body['data']['user']['type'],
           );
         }
 

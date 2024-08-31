@@ -35,8 +35,8 @@ class _LoginPageState extends State<LoginPage> {
     final passwordValidator = MultiValidator([
       RequiredValidator(errorText: 'Senha é obrigatória'),
       MinLengthValidator(
-        8,
-        errorText: 'Senha precisa ter no mínimo 8 caracteres',
+        6,
+        errorText: 'Senha precisa ter no mínimo 6 caracteres',
       ),
     ]);
 
@@ -44,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
       () => GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
-          backgroundColor: AppConfig.primaryColor,
           body: SingleChildScrollView(
             child: SizedBox(
               height: size.height,
@@ -52,17 +51,14 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppConfig.primaryColor,
-                        ),
-                        height: 200,
-                        width: 200,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppConfig.primaryColor,
+                      ),
+                      child: Center(
                         child: Image.asset(
                           AppConfig.login,
                           fit: BoxFit.fill,
-                          color: AppConfig.backgroundColor,
                         ),
                       ),
                     ),

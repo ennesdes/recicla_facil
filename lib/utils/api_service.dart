@@ -120,7 +120,7 @@ class ApiService {
           'status': response.statusCode,
         };
       case 401:
-        body['message'] = 'Não autorizado';
+        body['messages'][0]['message'] = 'Não autorizado';
 
         var modifiedResponse = http.Response(
           jsonEncode(body),
@@ -132,7 +132,7 @@ class ApiService {
           'status': modifiedResponse.statusCode,
         };
       case 404:
-        body['message'] = 'Não encontrado';
+        body['messages'][0]['message'] = 'Não encontrado';
 
         var modifiedResponse = http.Response(
           jsonEncode(body),
@@ -149,7 +149,7 @@ class ApiService {
           'status': response.statusCode,
         };
       case 500:
-        body['message'] = 'Ocorreu um erro inesperado';
+        body['messages'][0]['message'] = 'Ocorreu um erro inesperado';
 
         var modifiedResponse = http.Response(
           jsonEncode(body),
