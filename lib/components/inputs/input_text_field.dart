@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:recicla_facil/utils/app_config.dart';
 
 class InputTextField extends StatefulWidget {
@@ -9,6 +10,7 @@ class InputTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final Function(String?)? onChanged;
   final TextEditingController? controller;
+  final List<TextInputFormatter>? inputFormatters;
 
   const InputTextField({
     super.key,
@@ -19,6 +21,7 @@ class InputTextField extends StatefulWidget {
     this.validator,
     this.controller,
     this.onChanged,
+    this.inputFormatters,
   });
 
   @override
@@ -31,7 +34,6 @@ class _InputTextFieldState extends State<InputTextField> {
   @override
   void initState() {
     super.initState();
-
     isObscure = widget.isSecret;
   }
 
@@ -40,6 +42,8 @@ class _InputTextFieldState extends State<InputTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
+        inputFormatters:
+            widget.inputFormatters, // Aplicando inputFormatters corretamente
         controller: widget.controller,
         obscureText: isObscure,
         decoration: InputDecoration(
@@ -66,6 +70,7 @@ class _InputTextFieldState extends State<InputTextField> {
         onChanged: widget.onChanged,
         cursorColor: AppConfig.primaryColor,
         validator: widget.validator,
+        readOnly: widget.readOnly,
       ),
     );
   }
