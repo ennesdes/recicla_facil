@@ -1,26 +1,26 @@
 import 'package:recicla_facil/enum/trash_type.dart';
-import 'orcamento.dart'; // Certifique-se de importar a classe Orcamento
+import 'package:recicla_facil/models/budget.dart';
 
-class Proposta {
+class Proposal {
   final String id;
   final String nome;
   final String local;
   final TrashTypeEnum tipoColeta;
   final double quantidade;
-  final List<Orcamento> orcamentos;
+  final List<Budget> budgets;
 
-  Proposta({
+  Proposal({
     required this.id,
     required this.nome,
     required this.local,
     required this.tipoColeta,
     required this.quantidade,
-    required this.orcamentos,
+    required this.budgets,
   });
 
   // Método fromMap
-  factory Proposta.fromMap(Map<String, dynamic> map) {
-    return Proposta(
+  factory Proposal.fromMap(Map<String, dynamic> map) {
+    return Proposal(
       id: map['id'] as String,
       nome: map['nome'] as String,
       local: map['local'] as String,
@@ -28,8 +28,8 @@ class Proposta {
         (e) => e.toString().split('.').last == map['tipoColeta'],
       ),
       quantidade: map['quantidade'] as double,
-      orcamentos: (map['orcamentos'] as List)
-          .map((orcamento) => Orcamento.fromMap(orcamento))
+      budgets: (map['budgets'] as List)
+          .map((budget) => Budget.fromMap(budget))
           .toList(),
     );
   }
@@ -42,7 +42,7 @@ class Proposta {
       'local': local,
       'tipoColeta': tipoColeta.toString().split('.').last,
       'quantidade': quantidade,
-      'orcamentos': orcamentos.map((orcamento) => orcamento.toMap()).toList(),
+      'budgets': budgets.map((budget) => budget.toMap()).toList(),
     };
   }
 }

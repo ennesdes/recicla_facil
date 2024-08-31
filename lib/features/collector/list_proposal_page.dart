@@ -3,66 +3,65 @@ import 'package:flutter/services.dart'; // Import para usar inputFormatters
 import 'package:get/get.dart';
 import 'package:recicla_facil/components/inputs/input_text_field.dart';
 import 'package:recicla_facil/enum/trash_type.dart';
-import 'package:recicla_facil/features/coletor/listagem_propostas/listagem_proposta_controller.dart';
-import 'package:recicla_facil/features/coletor/listagem_propostas/listagem_proposta_service.dart';
-import 'package:recicla_facil/models/proposta.dart';
+import 'package:recicla_facil/features/collector/list_proposal_controller.dart';
+import 'package:recicla_facil/models/proposal.dart';
 import 'package:recicla_facil/utils/app_config.dart';
 
-class ListagemPropostaPage extends GetView<ListagemPropostaController> {
-  const ListagemPropostaPage({super.key});
+class ListProposalPage extends GetView<ListProposalController> {
+  const ListProposalPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ListagemPropostaController controller = Get.put(
-      ListagemPropostaController(Get.put(ListagemPropostaService())),
-    );
-
     // Dados de teste com apenas um item
-    var propostaLocal = {
-      "propostas": [
+    var proposalLocal = {
+      "proposals": [
         {
           "id": "1",
-          "nome": "Proposta de Teste",
+          "nome": "Proposal de Teste",
           "local": "Local de Teste",
           "tipoColeta": "recyclable",
           "quantidade": 100.0,
-          "orcamentos": [
+          "budgets": [
             {
               "id": "1",
               "nome": "Orçamento de Teste",
               "valor": 5000.0,
-              "propostaId": "1"
+              "proposalId": "1"
             }
           ]
         }
       ]
     };
 
-    final propostas = (propostaLocal['propostas'] as List)
-        .map((data) => Proposta.fromMap(data))
+    final proposals = (proposalLocal['proposals'] as List)
+        .map((data) => Proposal.fromMap(data))
         .toList();
 
     return Scaffold(
-      backgroundColor:
-          AppConfig.backgroundColor ?? Colors.white, // Fundo da página
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          'Listagem Propostas',
+          'List Proposals',
           textAlign: TextAlign.center,
         ),
-        backgroundColor: AppConfig.primaryColor, // Cor primária
+        backgroundColor: AppConfig.primaryColor,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () => Get.toNamed('/login_page'),
+          icon: const Icon(Icons.exit_to_app),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView.builder(
-          itemCount: propostas.length,
+          itemCount: proposals.length,
           itemBuilder: (context, index) {
-            final proposta = propostas[index];
+            final proposal = proposals[index];
             final valorTotal =
-                proposta.orcamentos.fold(0.0, (sum, item) => sum + item.valor);
+                proposal.budgets.fold(0.0, (sum, item) => sum + item.valor);
 
             // Um TextEditingController para o item
-            final TextEditingController orcamentoEC = TextEditingController();
+            final TextEditingController budgetEC = TextEditingController();
 
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
@@ -77,28 +76,27 @@ class ListagemPropostaPage extends GetView<ListagemPropostaController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      proposta.nome,
+                      proposal.nome,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppConfig.textTitleColor ??
-                            AppConfig.textColor, // Cor do título
+                        color: AppConfig.textTitleColor ?? AppConfig.textColor,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Local: ${proposta.local}',
+                      'Local: ${proposal.local}',
                       style: TextStyle(
                         fontSize: 16,
-                        color: AppConfig.textColor, // Cor dos textos
+                        color: AppConfig.textColor,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Tipo de Coleta: ${proposta.tipoColeta.description}',
+                      'Tipo de Coleta: ${proposal.tipoColeta.description}',
                       style: TextStyle(
                         fontSize: 16,
-                        color: AppConfig.textColor, // Cor dos textos
+                        color: AppConfig.textColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -107,17 +105,16 @@ class ListagemPropostaPage extends GetView<ListagemPropostaController> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppConfig.textColor, // Cor do valor
+                        color: AppConfig.textColor,
                       ),
                     ),
                     const SizedBox(height: 16),
                     InputTextField(
-                      controller: orcamentoEC,
+                      controller: budgetEC,
                       icon: Icons.attach_money,
                       label: 'Valor do orçamento',
                       inputFormatters: [
-                        FilteringTextInputFormatter
-                            .digitsOnly, // Permite apenas números
+                        FilteringTextInputFormatter.digitsOnly,
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -126,10 +123,10 @@ class ListagemPropostaPage extends GetView<ListagemPropostaController> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            // Lógica para recusar a proposta
+                            // Lógica para recusar a proposal
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red, // Cor do botão recusar
+                            backgroundColor: Colors.red,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -141,11 +138,10 @@ class ListagemPropostaPage extends GetView<ListagemPropostaController> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // Lógica para enviar a proposta
+                            // Lógica para enviar a proposal
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Colors.green, // Cor do botão enviar
+                            backgroundColor: Colors.green,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),

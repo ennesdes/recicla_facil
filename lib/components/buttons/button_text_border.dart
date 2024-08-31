@@ -33,7 +33,7 @@ class ButtonTextBorder extends StatelessWidget {
               )
             : null,
         backgroundColor: backgroundColor ?? AppConfig.backgroundColor,
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       ),
       onPressed: onPressed,
       child: Text(

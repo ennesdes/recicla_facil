@@ -1,26 +1,26 @@
 import 'dart:convert';
 
 import 'package:recicla_facil/models/api_response.dart';
-import 'package:recicla_facil/models/proposta.dart';
+import 'package:recicla_facil/models/proposal.dart';
 import 'package:recicla_facil/utils/api_service.dart';
 
-class ListagemPropostaService {
-  Future<ApiResponse> getAllPropostas() async {
+class ListProposalService {
+  Future<ApiResponse> getAllProposals() async {
     try {
       var response = await ApiService().post(
-        'getAllPropostas',
+        'getAllProposals',
       );
 
-      var propostas = <Proposta>[];
+      var proposals = <Proposal>[];
 
       if (response != null) {
         var body = jsonDecode(response['body'].toString());
 
-        for (var proposta in body) {
-          propostas.add(proposta);
+        for (var proposal in body) {
+          proposals.add(proposal);
         }
 
-        return ApiResponse(success: true, data: propostas);
+        return ApiResponse(success: true, data: proposals);
       }
 
       return ApiResponse(

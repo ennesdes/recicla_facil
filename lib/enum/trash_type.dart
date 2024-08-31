@@ -26,4 +26,23 @@ extension TrashTypeEnumExtension on TrashTypeEnum {
         return '';
     }
   }
+
+  int get number {
+    switch (this) {
+      case TrashTypeEnum.recyclable:
+        return 1;
+      case TrashTypeEnum.organic:
+        return 2;
+      case TrashTypeEnum.electronic:
+        return 3;
+      case TrashTypeEnum.chemical:
+        return 4;
+      case TrashTypeEnum.construction:
+        return 5;
+      case TrashTypeEnum.hospital:
+        return 6;
+      default:
+        return 0; // Caso não seja encontrado, retorna 0 ou outro valor padrão.
+    }
+  }
 }

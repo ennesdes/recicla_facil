@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart'; // Adiciona o pacote intl para formatação de data
 import 'package:recicla_facil/utils/app_config.dart';
 
 class InputTextField extends StatefulWidget {
@@ -11,6 +12,9 @@ class InputTextField extends StatefulWidget {
   final Function(String?)? onChanged;
   final TextEditingController? controller;
   final List<TextInputFormatter>? inputFormatters;
+  final bool isDateTime;
+  final TextInputType?
+      keyboardType; // Adiciona a opção para escolher o tipo de teclado
 
   const InputTextField({
     super.key,
@@ -22,6 +26,9 @@ class InputTextField extends StatefulWidget {
     this.controller,
     this.onChanged,
     this.inputFormatters,
+    this.isDateTime = false,
+    this.keyboardType =
+        TextInputType.text, // Inicializa com o teclado de texto padrão
   });
 
   @override
@@ -35,6 +42,64 @@ class _InputTextFieldState extends State<InputTextField> {
   void initState() {
     super.initState();
     isObscure = widget.isSecret;
+  }
+
+  Future<void> _selectDateTime() async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(), // Restrição para hoje e para frente
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: AppConfig.primaryColor,
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            colorScheme: ColorScheme.light(primary: AppConfig.primaryColor!),
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (selectedDate != null) {
+      TimeOfDay? selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              primaryColor: AppConfig.primaryColor,
+              buttonTheme:
+                  const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              colorScheme: ColorScheme.light(primary: AppConfig.primaryColor!),
+              dialogBackgroundColor: Colors.white,
+            ),
+            child: child!,
+          );
+        },
+      );
+
+      if (selectedTime != null) {
+        final dateTime = DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
+
+        // Formata a data e a hora para um formato amigável para o usuário
+        final formattedDateTime = DateFormat('dd/MM/yyyy HH:mm').format(
+          dateTime,
+        );
+
+        // Atualiza o texto do controlador com o formato amigável
+        widget.controller?.text = formattedDateTime;
+      }
+    }
   }
 
   @override
@@ -69,7 +134,9 @@ class _InputTextFieldState extends State<InputTextField> {
         onChanged: widget.onChanged,
         cursorColor: AppConfig.primaryColor,
         validator: widget.validator,
-        readOnly: widget.readOnly,
+        readOnly: widget.readOnly || widget.isDateTime,
+        onTap: widget.isDateTime ? _selectDateTime : null,
+        keyboardType: widget.keyboardType,
       ),
     );
   }

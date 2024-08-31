@@ -1,89 +1,107 @@
 import 'dart:convert';
 
 import 'package:recicla_facil/models/api_response.dart';
+import 'package:recicla_facil/models/company_model.dart';
 import 'package:recicla_facil/utils/api_service.dart';
-import 'package:recicla_facil/utils/token_manager.dart';
 
 class SupplierService {
-  Future<ApiResponse> login(String login, String password) async {
+  Future<ApiResponse> getCollectors({
+    required String name,
+    required int type,
+  }) async {
+    try {
+      var response = await ApiService().get(
+        'Company/GetCollectors',
+        queryParams: {
+          'name': name.isEmpty ? null : name,
+          'type': type.toString(),
+        },
+      );
+
+      if (response != null && response['status'] == 200) {
+        // Decodifique o JSON em um Map
+        var body = jsonDecode(response['body']) as Map<String, dynamic>;
+        var data = body['data'] as List<dynamic>;
+
+        List<CompanyModel> companyList = data
+            .map((item) => CompanyModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+
+        return ApiResponse(
+          success: true,
+          data: companyList,
+        );
+      } else if (response != null) {
+        var body = jsonDecode(response['body']) as Map<String, dynamic>;
+
+        return ApiResponse(
+          success: false,
+          message: body['messages'][0]['message'],
+        );
+      }
+
+      return ApiResponse(
+        success: false,
+        message: 'Erro ao realizar consulta de empresas coletoras',
+      );
+    } on Exception {
+      return ApiResponse(
+        success: false,
+        message: 'Erro ao realizar busca de empresas',
+      );
+    }
+  }
+
+  Future<ApiResponse> addProposal({
+    required int type,
+    required int amount,
+    required String observation,
+    required String collectorId,
+    required String date,
+  }) async {
     try {
       var response = await ApiService().post(
-        'Authentication/GenerateToken',
+        'Proposal',
         body: {
-          'email': login,
-          'password': password,
+          'type': type,
+          'amount': amount,
+          'observation': observation,
+          'collectorId': collectorId,
+          'date': date,
         },
       );
 
       if (response != null) {
         var body = jsonDecode(response['body']);
 
-        if (body['data'] == null) {
+        if (body['success'] == false) {
           return ApiResponse(
             success: false,
-            message: body['messages'][0]['message'] ?? 'Erro ao realizar login',
+            message: body['messages'][0]['message'] ?? 'Erro ao criar proposta',
           );
         }
 
-        if (body['data']['token'] != null && body['data']['token'] != '') {
-          TokenManager().saveToken(body['data']['token']);
-
+        if (body['success'] == true) {
           return ApiResponse(
             success: true,
-            message: 'Login realizado com sucesso',
+            message: 'Proposta enviada com sucesso',
           );
         }
 
         return ApiResponse(
           success: false,
-          message: body['messages'][0]['message'] ?? 'Erro ao realizar login',
+          message: body['messages'][0]['message'] ?? 'Erro ao criar proposta',
         );
       }
 
       return ApiResponse(
         success: false,
-        message: 'Erro ao realizar login',
+        message: 'Erro ao criar proposta',
       );
     } on Exception {
       return ApiResponse(
         success: false,
-        message: 'Erro ao realizar login',
-      );
-    }
-  }
-
-  Future<ApiResponse> logout() async {
-    try {
-      var response = await ApiService().post(
-        'auth/logout',
-      );
-
-      if (response != null) {
-        var body = jsonDecode(response['body'].toString());
-
-        if (response['status'] == 200 || response['status'] == 401) {
-          TokenManager().removeToken();
-
-          return ApiResponse(
-            success: true,
-            message: 'Logout realizado com sucesso',
-          );
-        }
-
-        return ApiResponse(
-          success: false,
-          message: body['messages'][0]['message'] ?? 'Erro ao realizar logout',
-        );
-      }
-
-      return ApiResponse(
-        success: false,
-        message: 'Erro ao realizar logout',
-      );
-    } on Exception {
-      return ApiResponse(
-        success: false,
-        message: 'Erro ao realizar logout',
+        message: 'Erro ao criar proposta de entrega',
       );
     }
   }
