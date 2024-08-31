@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:recicla_facil/features/login/login_page.dart';
+import 'package:recicla_facil/features/login%20copy/login_page.dart';
 import 'package:recicla_facil/features/supplier/supplier_page.dart';
 import 'package:recicla_facil/features/supplier/views/search_company_view.dart';
 
